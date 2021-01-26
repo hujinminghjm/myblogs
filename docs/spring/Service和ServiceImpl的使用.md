@@ -1,7 +1,9 @@
 # Service和ServiceImpl的使用
 
 Service层 = Service接口 + ServiceImpl 实现类
-Service 接口层就是是端口，ServiceImpl 实现类里不同的方法就是 线路1、线路2甚至是线路3
+
+Service接口层就是端口，ServiceImpl 实现类里不同的方法就是 线路1、线路2、线路3，不同的实现
+
 Spring 官方推荐也是这种模式
 
 Controller层推荐是注入service层
