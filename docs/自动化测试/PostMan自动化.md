@@ -127,27 +127,27 @@ PostMan目前有三个层级Collection、Folder、Request，每一个层级下�
 ##### 6.3.1.1 脚本的执行顺序说明
  **层级结构:** 
 
-![](https://images.gitee.com/uploads/images/2020/1123/085358_156ec721_1408664.png "WX20201120-171325@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/085358_156ec721_1408664.png)
 
 
 1. 我们在BIMS-AAA这个Collection下，点击EDIT后，在Pre-request Script和Tests中分别输入console.log("From: 集合-请求前脚本")和console.log("From: 集合-请求后脚本")，点击保存
 
  **新建Collection:** 
-![](https://images.gitee.com/uploads/images/2020/1123/092714_c2d5e800_1408664.png "WX20201123-092427@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/092714_c2d5e800_1408664.png)
 
 2. 我们在该Collection下新建一个queryCustomer的Folder,Pre-request Script和Tests中分别输入console.log("From: 子文件夹-请求前脚本")和console.log("From: 集合-请求后脚本")，点击保存
 
  **新建Folder:** 
-![](https://images.gitee.com/uploads/images/2020/1123/093125_a09a6e19_1408664.png "WX20201123-092528@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/093125_a09a6e19_1408664.png)
 
 3. 我们在该Folder目录下新建一个请求，Pre-request Script和Tests中分别输入console.log("From: queryCustomer请求-请求前脚本")和console.log("From: queryCustomer请求-请求后脚本")，点击保存
 
  **新建queryCustomer请求:** 
-![](https://images.gitee.com/uploads/images/2020/1123/093739_4b74ff17_1408664.png "WX20201123-093641@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/093739_4b74ff17_1408664.png)
 
 4. 执行脚本，从下图中可以看出，预执行脚本和后执行脚本的顺序都是一个由大到小的顺序
 
-![](https://images.gitee.com/uploads/images/2020/1123/094315_b247b1ee_1408664.png "WX20201123-094236@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/094315_b247b1ee_1408664.png)
 
 
 ##### 6.3.1.2 保存在集合/子文件夹中的请求单独发送时是否会执行集合以及子文件中设置的脚本?
@@ -156,7 +156,7 @@ PostMan目前有三个层级Collection、Folder、Request，每一个层级下�
 ##### 6.3.1.3 使用Runner运行集合时, 集合/子文件夹的脚本是只执行一次还是每个脚本都执行一次?
 假设Collection中有多个请求，那么执行这个Collection时，Collection/Folder中的脚本每个请求都会执行一遍
 
-![](https://images.gitee.com/uploads/images/2020/1123/095249_3a07d5b5_1408664.png "WX20201123-094628@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/095249_3a07d5b5_1408664.png)
 
 #### 6.3.2 校验响应的JsonSchema格式
 > 对于JSON格式的响应数据，在不同的数据和场景下往往会有一部分动态的值及字段。此时我们可以使用JSON Scheme Validator（JSON结构验证）来验证JSON的结构，各参数及嵌套参数的类型，以及必要字段，另外也必须要校验json的格式返回是否正确，如服务有改动，那么可以校验返回的格式是否有更改，可有效用于回归测试。
@@ -224,7 +224,7 @@ PostMan目前有三个层级Collection、Folder、Request，每一个层级下�
 
 此时可以使用PostMan tv4进行验证，tv4即 Tiny Validator for JSON data的缩写，微型JSON结构验证器。在Postman中的使用方法也很简单，首先在Tests脚本中根据响应编写JSON Schema结构模板，然后使用tv4.validate(jsonData, schema)进行验证即可，同时断言也是通过的，如下图：
 
-![](https://images.gitee.com/uploads/images/2020/1123/101750_d7dbadca_1408664.png "WX20201123-101720@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/101750_d7dbadca_1408664.png)
 
 Tests代码：
 
@@ -289,7 +289,7 @@ pm.sendRequest("http://www.baidu.com", (error, response) => {
 });
 ```
 
-![](https://images.gitee.com/uploads/images/2020/1123/111227_a472f0df_1408664.png "WX20201123-111133@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/111227_a472f0df_1408664.png)
 
 #### 6.3.4 PostMan连接数据库
 > 使用接口测试时，会有需求用到连接数据库，比如查询父子关系接口中通过子账号查询父账号，是需要通过自已查库后得到父账号与接口中返回的父账号进行比较才能确定接口返回的是正确的，但PostMan自身未提供操作数据库的功能，为方便测试人员使用PostMan，进行接口自动化测试时，可以直接请求操作数据库，故提供以下两种方式进行使用。
@@ -316,7 +316,7 @@ spring.datasource.dynamic.datasource.shlt.driver-class-name=com.mysql.jdbc.Drive
 dynamic.datasource.list=shyd,shdx,shlt
 ```
 
-![](https://images.gitee.com/uploads/images/2020/1125/151004_2489b582_1408664.png "WX20201125-150948@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/151004_2489b582_1408664.png)
 
 请求地址:http://10.215.29.169:9001/api/mysql/queryForList
 
@@ -342,7 +342,7 @@ dynamic.datasource.list=shyd,shdx,shlt
 
 请求示例：
 
-![](https://images.gitee.com/uploads/images/2020/1125/150714_d99e3292_1408664.png "WX20201125-150639@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/150714_d99e3292_1408664.png)
 
 在Tests中的代码为：
 
@@ -389,7 +389,7 @@ pm.sendRequest(mysqlRequest, (error, response) => {
 
 从图中可以看出已经返回了查询后的结果
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1125/180007_07294d42_1408664.png "WX20201125-175951@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/180007_07294d42_1408664.png)
 
 
 #### 6.3.5 通用方法的抽取
@@ -397,15 +397,15 @@ pm.sendRequest(mysqlRequest, (error, response) => {
 
 这里以验证请求的状态码为例，这里在Folder中编写通用的验证方法：
 
-![](https://images.gitee.com/uploads/images/2020/1123/112142_4796db40_1408664.png "WX20201123-112047@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/112142_4796db40_1408664.png)
 
 然后执行用例时，就会先执行Folder中通用的状态码验证方法，然后在执行请求用例中的定制化的方法，从图中的Tests执行结果可以看到，先是执行了Folder中编写通用的验证状态码的方法，然后再验证这条请求中的Tests中的customerCode is valid的验证方法
 
-![](https://images.gitee.com/uploads/images/2020/1123/112525_1b58241b_1408664.png "WX20201123-112506@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/112525_1b58241b_1408664.png)
 
  **这里还可以控制某些用例执行某些通用的方法，** 比如这里的UserID为空、和UserID字段缺失这两条用例，这两个请求服务端返回的json的数据都是一样的，那么又不想分别在这两条用例中写同样的验证方法，所以这里可以在Folder中进行用例的判断，如果此时请求是这两条用例（通过pm.info.requestName判断），则走IF控制中的方法，同时UserID不为空的用例则不会走到IF的逻辑中
 
-![](https://images.gitee.com/uploads/images/2020/1123/113522_10924b58_1408664.png "WX20201123-113437@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/113522_10924b58_1408664.png)
 
 #### 6.3.6 PostMan的常用方法
 1. 在使用中，经常需要比较两个字符串是否相等，同时Tests中需要输出预期值和实际值的相关信息，所有这里可以在全局变量中写一个通用的验证方法，再通过eval进行计算，方法中name为返回的元素key，actual为返回的实际值，expected为预期值，这里可以编写多个验证方法
@@ -413,7 +413,7 @@ pm.sendRequest(mysqlRequest, (error, response) => {
 - assertNotEqual，返回元素是否与预期值不一致
 - assertType，验证返回元素的类型
 
-![](https://images.gitee.com/uploads/images/2020/1124/090823_42bc5452_1408664.png "WX20201124-090606@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/090823_42bc5452_1408664.png)
 
 代码如下:
 
@@ -436,7 +436,7 @@ var assertEqual=(name,actual,expected)=>{pm.test(`${name}预期值${expected}(�
 4. 执行完成后，会在相应的目录中生成html报告
 
 可以从此报告中看到概要和请求的详情
-![](https://images.gitee.com/uploads/images/2020/1123/113125_f2b9e75a_1408664.png "WX20201123-113105@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/113125_f2b9e75a_1408664.png)
 
 #### 6.3.8 与Jenkins集成
 > 可以与Jenkins集成，这里待补充
@@ -445,11 +445,11 @@ var assertEqual=(name,actual,expected)=>{pm.test(`${name}预期值${expected}(�
 1. [测试用例下载地址](http://10.215.29.123:8089/apk/BIMS-AAA-queryCustomer-PostMan.zip)，解压zip文件
 2. 导入BIMS-AAA的Collection:
 
-![](https://images.gitee.com/uploads/images/2020/1123/122404_c1d5879b_1408664.png "WX20201123-122324@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/122404_c1d5879b_1408664.png)
 
 3. 导入环境变量BIMS-SHYD-Test.postman_environment.json
 
-![](https://images.gitee.com/uploads/images/2020/1123/122547_f1698ed4_1408664.png "WX20201123-122525@2x.png")
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/122547_f1698ed4_1408664.png)
 
 4. 执行用例
 
