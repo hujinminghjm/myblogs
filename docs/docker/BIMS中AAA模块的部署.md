@@ -5,43 +5,45 @@
 
 1. 基于mycentos6.9:v1做为最基础的镜像，启动新的容器
 2. 将对应的tomcat版本以及JDK版本解压缩到容器的/usr/local目录下
-- 容器中tomcat的目录为/usr/local/apache-tomcat-7.0.94
-- 容器中jdk目录为/usr/local/java/jdk1.7.0_80
-- 容器中tomcat已经指定了这个jdk版本
+   - 容器中tomcat的目录为/usr/local/apache-tomcat-7.0.94
+   - 容器中jdk目录为/usr/local/java/jdk1.7.0_80
+   - 容器中tomcat已经指定了这个jdk版本
 3. 为了部署aaa更方便，已经建立了aaa的标准目录
-- 容器中aaa的应用目录为/usr/bestv/apps/aaa
-- 容器中aaa的配置文件目录为/usr/bestv/configs/aaa/conf
-- 容器中aaa的日志目录为/usr/bestv/logs/aaa
-- 容器中aaa的发布文件aaa.xml已经建立好
-  1. 路径为/usr/local/apache-tomcat-7.0.94/conf/Catalina/localhost
-  2. aaa.xml内容为
-    ```
-    <Context path="/aaa" docBase="/usr/bestv/apps/aaa" workDir="/usr/bestv/apps/aaa/work" ></Context>
-    ```
-- tomcat中/usr/local/apache-tomcat-7.0.94/bin/catalina.sh已经指定了配置文件的路径
-```
-export JAVA_HOME=/usr/local/java/jdk1.7.0_80
-export JRE_HOME=/usr/local/java/jdk1.7.0_80/jre
-JAVA_OPTS="-Dconfig_dir=/usr/bestv/configs/aaa/conf"
-```
+   - 容器中aaa的应用目录为/usr/bestv/apps/aaa
+   - 容器中aaa的配置文件目录为/usr/bestv/configs/aaa/conf
+   - 容器中aaa的日志目录为/usr/bestv/logs/aaa
+   - 容器中aaa的发布文件aaa.xml已经建立好
+     1. 路径为/usr/local/apache-tomcat-7.0.94/conf/Catalina/localhost
+     2. aaa.xml内容为
+        ```
+        <Context path="/aaa" docBase="/usr/bestv/apps/aaa" workDir="/usr/bestv/apps/aaa/work" ></Context>
+        ```
+   - tomcat中/usr/local/apache-tomcat-7.0.94/bin/catalina.sh已经指定了配置文件的路径
+        ```
+        export JAVA_HOME=/usr/local/java/jdk1.7.0_80
+        export JRE_HOME=/usr/local/java/jdk1.7.0_80/jre
+        JAVA_OPTS="-Dconfig_dir=/usr/bestv/configs/aaa/conf"
+        ```
 
-- 以上几个aaa的目录，都是与现网bims的aaa模块中的部署目录是保持一致的
+   - 以上几个aaa的目录，都是与现网bims的aaa模块中的部署目录是保持一致的
 4. 至此aaa的基础镜像已经制作好，我们push到docker hub中
 
 ## 2. 如何使用
 1. 使用以下命令pull aaa的基础镜像
+
 ```
 docker pull 111904/mytomcat:v3
 ```
+
 2. 在宿主机建立aaa需要的应用目录、配置文件目录、日志目录，比如以上海移动bims aaa为例，我们在本地建立一个目录叫做shyd_bims_aaa，在此目录下也同样建立三个目录apps、conf、logs
 
-- 宿主机中aaa的应用目录为shyd_bims_aaa/apps/
-- 宿主机中aaa的配置文件目录为shyd_bims_aaa/conf
-- 宿主机中aaa的日志目录为shyd_bims_aaa/logs
+   - 宿主机中aaa的应用目录为shyd_bims_aaa/apps/
+   - 宿主机中aaa的配置文件目录为shyd_bims_aaa/conf
+   - 宿主机中aaa的日志目录为shyd_bims_aaa/logs
 
 ![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/20210129151033.png)
 
-- 将aaa的压缩包解压到宿主机的shyd_bims_aaa/apps/目录下，如下所示
+   - 将aaa的压缩包解压到宿主机的shyd_bims_aaa/apps/目录下，如下所示
 
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# cd apps/
@@ -63,7 +65,7 @@ drwxr-xr-x 3 root root 4096 Jan 29 14:29 work
 [root@iZuf6c271nqm25qoqom0t9Z apps]# 
 ```
 
-- 将aaa的配置文件放到宿主机的shyd_bims_aaa/conf目录下，如下所示
+   - 将aaa的配置文件放到宿主机的shyd_bims_aaa/conf目录下，如下所示
 
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# cd conf/
@@ -77,16 +79,17 @@ total 32
 [root@iZuf6c271nqm25qoqom0t9Z conf]# 
 ```
 
-- 这里有一点需要注意的是，就是配置文件中的log4j.properties中的日志路径目前为/usr/bestv/logs/aaa，这个是容器中的路径，这里其实只要配置为容器中一个存在的路径即可
+   - 这里有一点需要注意的是，就是配置文件中的log4j.properties中的日志路径目前为/usr/bestv/logs/aaa，这个是容器中的路径，这里其实只要配置为容器中一个存在的路径即可
 
-1. 启动容器，这里需要映射代码和配置文件的目录，进入shyd_bims_aaa的目录
-- -e TZ="Asia/Shanghai"，代表设置tomcat的时区为上海
-- -v映射目录，这里的$(pwd)就是当前宿主机的目录，这里分别映射代码、配置文件、日志的三个目录
+3. 启动容器，这里需要映射代码和配置文件的目录，进入shyd_bims_aaa的目录
+   - -e TZ="Asia/Shanghai"，代表设置tomcat的时区为上海
+   - -v映射目录，这里的$(pwd)就是当前宿主机的目录，这里分别映射代码、配置文件、日志的三个目录
 ```
 [root@iZuf6c271nqm25qoqom0t9Z conf]# docker run -itd -e TZ="Asia/Shanghai" -p 8080:8080 -v $(pwd)/apps:/usr/bestv/apps/aaa -v $(pwd)/conf:/usr/bestv/configs/aaa/conf/ -v $(pwd)/logs/:/usr/bestv/logs/aaa mytomcat:v3
 ```
 
 4. 容器启动后，应该能看到如下所示的信息
+
 ```
 [root@iZuf6c271nqm25qoqom0t9Z conf]# docker ps
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
@@ -108,10 +111,11 @@ Tomcat started.
 [root@f35e62010c7c /]# 
 ```
 
-- 访问aaa的版本信息的地址，即可看到已经部署成功了。
+   - 访问aaa的版本信息的地址，即可看到已经部署成功了。
 ![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/20210129153428.png)
 
-- 在宿主机的logs目录下即可看到请求aaa的日志了
+   - 在宿主机的logs目录下即可看到请求aaa的日志了
+
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# cd logs/
 [root@iZuf6c271nqm25qoqom0t9Z logs]# ll
@@ -139,6 +143,7 @@ drwxr-xr-x 2 root root 4096 Jan 29 14:45 logs
 
 ## 4. 优点
 1. 通过这种方式，可以在一台机器上部署很多个aaa，比如我再创建一个上海联通的aaa，只要建立一个shlt_bims_aaa的目录，将代码、配置文件放进去即可
+
 ```
 [root@iZuf6c271nqm25qoqom0t9Z docker]# mkdir shlt_bims_aaa
 [root@iZuf6c271nqm25qoqom0t9Z docker]# ll
@@ -146,7 +151,9 @@ drwxr-xr-x 2 root root      4096 Jan 29 15:42 shlt_bims_aaa
 drwxr-xr-x 5 root root      4096 Jan 29 12:01 shyd_bims_aaa
 [root@iZuf6c271nqm25qoqom0t9Z docker]# 
 ```
+
 2. 我们目前大部分的bims的服务aaa、bims、pboss，都是放在151上的，这里我们需要维护不同的文件夹，也需要去维护里面的配置文件，还有每启动一个tomcat，都需要去维护tomcat的三个端口，以防启动失败，如果使用容器的方式，对宿主机只需要一个端口即可
+
 ```
 [root@iZuf656fw7axs5msw6k1i7Z bestv]# ll
 total 72
@@ -170,6 +177,7 @@ drwxr-xr-x  8 root root 4096 Jul  8  2020 xjdx
 ```
 
 这里维护端口信息，需要同时维护很多个
+
 ```
 [root@iZuf656fw7axs5msw6k1i7Z bestv]# cat port.txt
 这里记录不同项目的已占用的端口情况，以免新加入的tomcat启动报错，每加入进来一个tomcat都要在这里将端口情况记录下
