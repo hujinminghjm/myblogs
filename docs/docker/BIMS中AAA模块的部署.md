@@ -159,6 +159,7 @@ drwxr-xr-x 5 root root      4096 Jan 29 12:01 shyd_bims_aaa
 2. docker最大的一个好处就是方便迁移和不用重复的去部署tomcat、jdk这种基础环境
 
 3. 我们目前大部分的bims的服务aaa、bims、pboss，都是放在10.215.29.151上的，我们需要维护不同项目的文件夹，也需要去维护里面的配置文件，还有每启动一个tomcat，都需要去维护tomcat的三个端口，以防端口占用，如果使用容器的方式，对宿主机只需要一个端口即可
+
 ```
 [root@iZuf656fw7axs5msw6k1i7Z bestv]# ll
 total 72
@@ -181,7 +182,7 @@ drwxr-xr-x  7 root root 4096 Apr 24  2020 tools
 drwxr-xr-x  8 root root 4096 Jul  8  2020 xjdx
 ```
 
-这里维护端口信息，需要同时维护很多个
+- 这里维护端口信息，需要同时维护很多个
 ```
 [root@iZuf656fw7axs5msw6k1i7Z bestv]# cat port.txt
 这里记录不同项目的已占用的端口情况，以免新加入的tomcat启动报错，每加入进来一个tomcat都要在这里将端口情况记录下
