@@ -12,9 +12,7 @@
    - 容器中aaa的应用目录为/usr/bestv/apps/aaa
    - 容器中aaa的配置文件目录为/usr/bestv/configs/aaa/conf
    - 容器中aaa的日志目录为/usr/bestv/logs/aaa
-   - 容器中aaa的发布文件aaa.xml已经建立好
-     1. 路径为/usr/local/apache-tomcat-7.0.94/conf/Catalina/localhost
-     2. aaa.xml内容为
+   - 容器中aaa的发布文件aaa.xml已经建立好，路径为/usr/local/apache-tomcat-7.0.94/conf/Catalina/localhost，aaa.xml内容为
         ```
         <Context path="/aaa" docBase="/usr/bestv/apps/aaa" workDir="/usr/bestv/apps/aaa/work" ></Context>
         ```
@@ -24,7 +22,6 @@
         export JRE_HOME=/usr/local/java/jdk1.7.0_80/jre
         JAVA_OPTS="-Dconfig_dir=/usr/bestv/configs/aaa/conf"
         ```
-
    - 以上几个aaa的目录，都是与现网bims的aaa模块中的部署目录是保持一致的
 4. 至此aaa的基础镜像已经制作好，我们push到docker hub中
 
@@ -111,10 +108,10 @@ Tomcat started.
 [root@f35e62010c7c /]# 
 ```
 
-   - 访问aaa的版本信息的地址，即可看到已经部署成功了。
+6. 访问aaa的版本信息的地址，即可看到已经部署成功了。
 ![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/20210129153428.png)
 
-   - 在宿主机的logs目录下即可看到请求aaa的日志了
+7. 在宿主机的logs目录下即可看到请求aaa的日志了
 
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# cd logs/
@@ -152,7 +149,7 @@ drwxr-xr-x 5 root root      4096 Jan 29 12:01 shyd_bims_aaa
 [root@iZuf6c271nqm25qoqom0t9Z docker]# 
 ```
 
-2. 我们目前大部分的bims的服务aaa、bims、pboss，都是放在151上的，这里我们需要维护不同的文件夹，也需要去维护里面的配置文件，还有每启动一个tomcat，都需要去维护tomcat的三个端口，以防启动失败，如果使用容器的方式，对宿主机只需要一个端口即可
+2. 我们目前大部分的bims的服务aaa、bims、pboss，都是放在10.215.29.151上的，我们需要维护不同项目的文件夹，也需要去维护里面的配置文件，还有每启动一个tomcat，都需要去维护tomcat的三个端口，以防端口占用，如果使用容器的方式，对宿主机只需要一个端口即可
 
 ```
 [root@iZuf656fw7axs5msw6k1i7Z bestv]# ll
