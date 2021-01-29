@@ -118,6 +118,7 @@ Jan 29, 2021 4:38:30 PM org.apache.catalina.startup.VersionLoggerListener log
 6. 访问aaa的版本信息的地址，即可看到已经部署成功了。
 ![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/20210129153428.png)
 
+
 7. 在宿主机的logs目录下即可看到请求aaa的日志了
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# cd logs/
