@@ -182,7 +182,7 @@ drwxr-xr-x  7 root root 4096 Apr 24  2020 tools
 drwxr-xr-x  8 root root 4096 Jul  8  2020 xjdx
 ```
 
-- 这里维护端口信息，需要同时维护很多个
+- 我们目前维护端口信息，专门记录了一个文件port.txt，否则端口就容易冲突
 
 ```
 [root@iZuf656fw7axs5msw6k1i7Z bestv]# cat port.txt
