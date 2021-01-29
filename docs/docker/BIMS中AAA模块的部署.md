@@ -27,7 +27,6 @@
 
 ## 2. 如何使用
 1. 使用以下命令pull aaa的基础镜像
-
 ```
 docker pull 111904/mytomcat:v3
 ```
@@ -76,17 +75,16 @@ total 32
 [root@iZuf6c271nqm25qoqom0t9Z conf]# 
 ```
 
-   - 这里有一点需要注意的是，就是配置文件中的log4j.properties中的日志路径目前为/usr/bestv/logs/aaa，这个是容器中的路径，这里其实只要配置为容器中一个存在的路径即可
+   - 这里有一点需要注意的是，**就是配置文件中的log4j.properties中的日志路径目前为/usr/bestv/logs/aaa，这个是容器中的路径，这里其实只要配置为容器中一个存在的路径即可**
 
-3. 启动容器，这里需要映射代码和配置文件的目录，进入shyd_bims_aaa的目录
-   - -e TZ="Asia/Shanghai"，代表设置tomcat的时区为上海
-   - -v映射目录，这里的$(pwd)就是当前宿主机的目录，这里分别映射代码、配置文件、日志的三个目录
+3. 启动容器，这里需要映射代码和配置文件的目录，进入shyd_bims_aaa的目录，命令如下：
 ```
 [root@iZuf6c271nqm25qoqom0t9Z conf]#docker run -itd -e TZ="Asia/Shanghai" -p 8080:8080 -v $(pwd)/apps:/usr/bestv/apps/aaa -v $(pwd)/conf:/usr/bestv/configs/aaa/conf/ -v $(pwd)/logs/:/usr/bestv/logs/aaa 111904/mytomcat:v3
 ```
+   - -e TZ="Asia/Shanghai"，代表设置tomcat的时区为上海
+   - -v映射目录，这里的$(pwd)就是当前宿主机的目录，这里分别映射代码、配置文件、日志的三个目录
 
 4. 容器启动后，应该能看到如下所示的信息
-
 ```
 [root@iZuf6c271nqm25qoqom0t9Z conf]# docker ps
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
@@ -95,7 +93,6 @@ f35e62010c7c        mytomcat:v3         "/bin/bash"         43 minutes ago      
 ```
 
 5. 启动tomcat，执行如下的命令，即可看到tomcat已经启动了
-
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# docker exec -it df /bin/bash
 [root@df38cf83749f /]# ./usr/local/apache-tomcat-7.0.94/bin/startup.sh && tail -f /usr/local/apache-tomcat-7.0.94/logs/catalina.out 
@@ -122,7 +119,6 @@ Jan 29, 2021 4:38:30 PM org.apache.catalina.startup.VersionLoggerListener log
 ![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/20210129153428.png)
 
 7. 在宿主机的logs目录下即可看到请求aaa的日志了
-
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# cd logs/
 [root@iZuf6c271nqm25qoqom0t9Z logs]# ll
@@ -147,10 +143,10 @@ drwxr-xr-x 2 root root 4096 Jan 29 14:45 logs
 ## 3. 缺点
 1. 这里必须先使用docker run来启动容器，但此时并没有启动容器中的tomcat，这里就多了一步操作，所以如果更新代码时，需要先使用docker stop关闭容器，再更新代码，然后再使用docker start启动容器，再启动里面的tomcat，这里不是很方便，需要再研究下
 2. 查看tomcat的启动日志不方便，这里需要研究下
+3. <font color=red>其实个人感觉整套下来，也是有点麻烦的</font>
 
 ## 4. 优点
 1. 通过这种方式，可以在一台机器上部署很多个aaa，比如我再创建一个上海联通的aaa，只要建立一个shlt_bims_aaa的目录，将代码、配置文件放进去即可
-
 ```
 [root@iZuf6c271nqm25qoqom0t9Z docker]# mkdir shlt_bims_aaa
 [root@iZuf6c271nqm25qoqom0t9Z docker]# ll
@@ -159,8 +155,9 @@ drwxr-xr-x 5 root root      4096 Jan 29 12:01 shyd_bims_aaa
 [root@iZuf6c271nqm25qoqom0t9Z docker]# 
 ```
 
-2. 我们目前大部分的bims的服务aaa、bims、pboss，都是放在10.215.29.151上的，我们需要维护不同项目的文件夹，也需要去维护里面的配置文件，还有每启动一个tomcat，都需要去维护tomcat的三个端口，以防端口占用，如果使用容器的方式，对宿主机只需要一个端口即可
+2. docker最大的一个好处就是方便迁移和不用重复的去部署tomcat、jdk这种基础环境
 
+3. 我们目前大部分的bims的服务aaa、bims、pboss，都是放在10.215.29.151上的，我们需要维护不同项目的文件夹，也需要去维护里面的配置文件，还有每启动一个tomcat，都需要去维护tomcat的三个端口，以防端口占用，如果使用容器的方式，对宿主机只需要一个端口即可
 ```
 [root@iZuf656fw7axs5msw6k1i7Z bestv]# ll
 total 72
@@ -184,7 +181,6 @@ drwxr-xr-x  8 root root 4096 Jul  8  2020 xjdx
 ```
 
 这里维护端口信息，需要同时维护很多个
-
 ```
 [root@iZuf656fw7axs5msw6k1i7Z bestv]# cat port.txt
 这里记录不同项目的已占用的端口情况，以免新加入的tomcat启动报错，每加入进来一个tomcat都要在这里将端口情况记录下
