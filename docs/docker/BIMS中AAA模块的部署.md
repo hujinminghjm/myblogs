@@ -82,7 +82,7 @@ total 32
    - -e TZ="Asia/Shanghai"，代表设置tomcat的时区为上海
    - -v映射目录，这里的$(pwd)就是当前宿主机的目录，这里分别映射代码、配置文件、日志的三个目录
 ```
-[root@iZuf6c271nqm25qoqom0t9Z conf]# docker run -itd -e TZ="Asia/Shanghai" -p 8080:8080 -v $(pwd)/apps:/usr/bestv/apps/aaa -v $(pwd)/conf:/usr/bestv/configs/aaa/conf/ -v $(pwd)/logs/:/usr/bestv/logs/aaa mytomcat:v3
+[root@iZuf6c271nqm25qoqom0t9Z conf]#docker run -itd -e TZ="Asia/Shanghai" -p 8080:8080 -v $(pwd)/apps:/usr/bestv/apps/aaa -v $(pwd)/conf:/usr/bestv/configs/aaa/conf/ -v $(pwd)/logs/:/usr/bestv/logs/aaa 111904/mytomcat:v3
 ```
 
 4. 容器启动后，应该能看到如下所示的信息
@@ -97,15 +97,25 @@ f35e62010c7c        mytomcat:v3         "/bin/bash"         43 minutes ago      
 5. 启动tomcat，执行如下的命令，即可看到tomcat已经启动了
 
 ```
-[root@iZuf6c271nqm25qoqom0t9Z conf]# docker exec -it f3 /bin/bash
-[root@f35e62010c7c /]# ./usr/local/apache-tomcat-7.0.94/bin/startup.sh 
+[root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# docker exec -it df /bin/bash
+[root@df38cf83749f /]# ./usr/local/apache-tomcat-7.0.94/bin/startup.sh && tail -f /usr/local/apache-tomcat-7.0.94/logs/catalina.out 
 Using CATALINA_BASE:   /usr/local/apache-tomcat-7.0.94
 Using CATALINA_HOME:   /usr/local/apache-tomcat-7.0.94
 Using CATALINA_TMPDIR: /usr/local/apache-tomcat-7.0.94/temp
 Using JRE_HOME:        /usr/local/java/jdk1.7.0_80/jre
 Using CLASSPATH:       /usr/local/apache-tomcat-7.0.94/bin/bootstrap.jar:/usr/local/apache-tomcat-7.0.94/bin/tomcat-juli.jar
 Tomcat started.
-[root@f35e62010c7c /]# 
+Jan 29, 2021 3:51:55 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service Catalina
+Jan 29, 2021 3:51:55 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-bio-8080"]
+Jan 29, 2021 3:51:55 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["ajp-bio-8009"]
+Jan 29, 2021 3:51:55 AM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["http-bio-8080"]
+Jan 29, 2021 3:51:55 AM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["ajp-bio-8009"]
+Jan 29, 2021 4:38:30 PM org.apache.catalina.startup.VersionLoggerListener log
 ```
 
 6. 访问aaa的版本信息的地址，即可看到已经部署成功了。
