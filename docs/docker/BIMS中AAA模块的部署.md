@@ -183,6 +183,7 @@ drwxr-xr-x  8 root root 4096 Jul  8  2020 xjdx
 ```
 
 - 这里维护端口信息，需要同时维护很多个
+
 ```
 [root@iZuf656fw7axs5msw6k1i7Z bestv]# cat port.txt
 这里记录不同项目的已占用的端口情况，以免新加入的tomcat启动报错，每加入进来一个tomcat都要在这里将端口情况记录下
