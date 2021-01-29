@@ -9,3 +9,4 @@
     * [PostMan自动化](/自动化测试/PostMan自动化)
 * [Docker](/docker/README.md)
     * [基本使用](/docker/基本使用.md)
+    * [BIMS-AAA部署](/docker/BIMS中AAA模块的部署.md)
