@@ -3,21 +3,28 @@
 ## 1. 基础镜像的制作
 > BIMS中的AAA模块需要的tomcat版本为7.0.94，JDK为1.7.0_80，这里已经制作好了一个基础环境，步骤如下
 
-1. 基于mycentos6.9:v1的启动容器
+1. 基于mycentos6.9:v1做为最基础的镜像，启动新的容器
 2. 将对应的tomcat版本以及JDK版本解压缩到容器的/usr/local目录下
 - 容器中tomcat的目录为/usr/local/apache-tomcat-7.0.94
 - 容器中jdk目录为/usr/local/java/jdk1.7.0_80
 - 容器中tomcat已经指定了这个jdk版本
-3. 这个为了部署aaa更方便，已经建立了aaa的标准目录
+3. 为了部署aaa更方便，已经建立了aaa的标准目录
 - 容器中aaa的应用目录为/usr/bestv/apps/aaa
 - 容器中aaa的配置文件目录为/usr/bestv/configs/aaa/conf
 - 容器中aaa的日志目录为/usr/bestv/logs/aaa
-- 容器中aaa的发布文件已经建立好
+- 容器中aaa的发布文件aaa.xml已经建立好
   1. 路径为/usr/local/apache-tomcat-7.0.94/conf/Catalina/localhost
-  2. 文件为aaa.xml，内容为，这个里面的aaa的应用路径就是上面建立的路径
+  2. aaa.xml内容为
     ```
     <Context path="/aaa" docBase="/usr/bestv/apps/aaa" workDir="/usr/bestv/apps/aaa/work" ></Context>
     ```
+- tomcat中/usr/local/apache-tomcat-7.0.94/bin/catalina.sh已经指定了配置文件的路径
+```
+export JAVA_HOME=/usr/local/java/jdk1.7.0_80
+export JRE_HOME=/usr/local/java/jdk1.7.0_80/jre
+JAVA_OPTS="-Dconfig_dir=/usr/bestv/configs/aaa/conf"
+```
+
 - 以上几个aaa的目录，都是与现网bims的aaa模块中的部署目录是保持一致的
 4. 至此aaa的基础镜像已经制作好，我们push到docker hub中
 
@@ -26,7 +33,7 @@
 ```
 docker pull 111904/mytomcat:v3
 ```
-2. 在宿主机建立aaa需要的应用目录、配置文件目录、日志目录，我们在本地建立一个文件夹叫做shyd_bims_aaa，比如以上海移动bims aaa为例，我们在本地也同样建立三个文件夹
+2. 在宿主机建立aaa需要的应用目录、配置文件目录、日志目录，比如以上海移动bims aaa为例，我们在本地建立一个目录叫做shyd_bims_aaa，在此目录下也同样建立三个目录apps、conf、logs
 
 - 宿主机中aaa的应用目录为shyd_bims_aaa/apps/
 - 宿主机中aaa的配置文件目录为shyd_bims_aaa/conf
@@ -35,6 +42,7 @@ docker pull 111904/mytomcat:v3
 ![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/20210129151033.png)
 
 - 将aaa的压缩包解压到宿主机的shyd_bims_aaa/apps/目录下，如下所示
+
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# cd apps/
 [root@iZuf6c271nqm25qoqom0t9Z apps]# ll
@@ -56,6 +64,7 @@ drwxr-xr-x 3 root root 4096 Jan 29 14:29 work
 ```
 
 - 将aaa的配置文件放到宿主机的shyd_bims_aaa/conf目录下，如下所示
+
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# cd conf/
 [root@iZuf6c271nqm25qoqom0t9Z conf]# ll
@@ -68,7 +77,41 @@ total 32
 [root@iZuf6c271nqm25qoqom0t9Z conf]# 
 ```
 
-- 在宿主机的logs目录下，如果容器启动后，将
+- 这里有一点需要注意的是，就是配置文件中的log4j.properties中的日志路径目前为/usr/bestv/logs/aaa，这个是容器中的路径，这里其实只要配置为容器中一个存在的路径即可
+
+1. 启动容器，这里需要映射代码和配置文件的目录，进入shyd_bims_aaa的目录
+- -e TZ="Asia/Shanghai"，代表设置tomcat的时区为上海
+- -v映射目录，这里的$(pwd)就是当前宿主机的目录，这里分别映射代码、配置文件、日志的三个目录
+```
+[root@iZuf6c271nqm25qoqom0t9Z conf]# docker run -itd -e TZ="Asia/Shanghai" -p 8080:8080 -v $(pwd)/apps:/usr/bestv/apps/aaa -v $(pwd)/conf:/usr/bestv/configs/aaa/conf/ -v $(pwd)/logs/:/usr/bestv/logs/aaa mytomcat:v3
+```
+
+4. 容器启动后，应该能看到如下所示的信息
+```
+[root@iZuf6c271nqm25qoqom0t9Z conf]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
+f35e62010c7c        mytomcat:v3         "/bin/bash"         43 minutes ago      Up 43 minutes       0.0.0.0:8080->8080/tcp   lucid_shirley
+[root@iZuf6c271nqm25qoqom0t9Z conf]# 
+```
+
+5. 启动tomcat，执行如下的命令，即可看到tomcat已经启动了
+
+```
+[root@iZuf6c271nqm25qoqom0t9Z conf]# docker exec -it f3 /bin/bash
+[root@f35e62010c7c /]# ./usr/local/apache-tomcat-7.0.94/bin/startup.sh 
+Using CATALINA_BASE:   /usr/local/apache-tomcat-7.0.94
+Using CATALINA_HOME:   /usr/local/apache-tomcat-7.0.94
+Using CATALINA_TMPDIR: /usr/local/apache-tomcat-7.0.94/temp
+Using JRE_HOME:        /usr/local/java/jdk1.7.0_80/jre
+Using CLASSPATH:       /usr/local/apache-tomcat-7.0.94/bin/bootstrap.jar:/usr/local/apache-tomcat-7.0.94/bin/tomcat-juli.jar
+Tomcat started.
+[root@f35e62010c7c /]# 
+```
+
+- 访问aaa的版本信息的地址，即可看到已经部署成功了。
+![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/20210129153428.png)
+
+- 在宿主机的logs目录下即可看到请求aaa的日志了
 ```
 [root@iZuf6c271nqm25qoqom0t9Z shyd_bims_aaa]# cd logs/
 [root@iZuf6c271nqm25qoqom0t9Z logs]# ll
@@ -89,38 +132,6 @@ drwxr-xr-x 2 root root 4096 Jan 29 14:45 logs
 -rw-r--r-- 1 root root    0 Jan 29 14:29 unorderLog.log
 [root@iZuf6c271nqm25qoqom0t9Z logs]# 
 ```
-- 这里有一点需要注意的是，就是配置文件中的log4j.properties中的日志路径目前为/usr/bestv/logs/aaa，这个是容器中的路径，这里其实只要配置为容器中一个存在的路径即可
-
-3. 启动容器，这里需要映射代码和配置文件的目录，进入shyd_bims_aaa的目录
-- -e TZ="Asia/Shanghai"，代表设置tomcat的时区为上海
-- -v映射目录，这里的$(pwd)就是当前宿主机的目录，这里分别映射代码、配置文件、日志的三个目录
-```
-[root@iZuf6c271nqm25qoqom0t9Z conf]# docker run -itd -e TZ="Asia/Shanghai" -p 8080:8080 -v $(pwd)/apps:/usr/bestv/apps/aaa -v $(pwd)/conf:/usr/bestv/configs/aaa/conf/ -v $(pwd)/logs/:/usr/bestv/logs/aaa mytomcat:v3
-```
-
-4. 容器启动后，应该能看到如下所示的信息
-```
-[root@iZuf6c271nqm25qoqom0t9Z conf]# docker ps
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
-f35e62010c7c        mytomcat:v3         "/bin/bash"         43 minutes ago      Up 43 minutes       0.0.0.0:8080->8080/tcp   lucid_shirley
-[root@iZuf6c271nqm25qoqom0t9Z conf]# 
-```
-
-5. 启动tomcat，执行如下的命令，即可看到tomcat已经启动了
-```
-[root@iZuf6c271nqm25qoqom0t9Z conf]# docker exec -it f3 /bin/bash
-[root@f35e62010c7c /]# ./usr/local/apache-tomcat-7.0.94/bin/startup.sh 
-Using CATALINA_BASE:   /usr/local/apache-tomcat-7.0.94
-Using CATALINA_HOME:   /usr/local/apache-tomcat-7.0.94
-Using CATALINA_TMPDIR: /usr/local/apache-tomcat-7.0.94/temp
-Using JRE_HOME:        /usr/local/java/jdk1.7.0_80/jre
-Using CLASSPATH:       /usr/local/apache-tomcat-7.0.94/bin/bootstrap.jar:/usr/local/apache-tomcat-7.0.94/bin/tomcat-juli.jar
-Tomcat started.
-[root@f35e62010c7c /]# 
-```
-
-访问aaa的版本信息的地址，即可看到已经部署成功了。
-![](https://gitee.com/jinming_hu/myblogs/raw/master/pic/20210129153428.png)
 
 ## 3. 缺点
 1. 这里必须先使用docker run来启动容器，但此时并没有启动容器中的tomcat，这里就多了一步操作，所以如果更新代码时，需要先使用docker stop关闭容器，再更新代码，然后再使用docker start启动容器，再启动里面的tomcat，这里不是很方便，需要再研究下
