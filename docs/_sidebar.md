@@ -1,6 +1,6 @@
 * [首页](/)
 * [JAVA](/java/README.md)
-    * [基础](/java/基础/泛型)
+    * [基础]
         * [-  泛型](/java/基础/泛型)
         * [-  字符串](/java/基础/字符串)
 * [SPRING](/spring/README.md)
